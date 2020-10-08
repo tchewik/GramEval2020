@@ -12,7 +12,7 @@ from allennlp.data.instance import Instance
 from allennlp.data.token_indexers import SingleIdTokenIndexer, TokenIndexer
 from allennlp.data.tokenizers import Token, Tokenizer
 
-from train.corpus_iterator import CorpusIterator, Sentence as CorpusSentence
+from solution.train.corpus_iterator import CorpusIterator, Sentence as CorpusSentence
 
 logger = logging.getLogger(__name__)
 

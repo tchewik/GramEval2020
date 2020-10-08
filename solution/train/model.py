@@ -22,7 +22,7 @@ from allennlp.nn.util import get_device_of, masked_log_softmax, get_lengths_from
 from allennlp.nn.chu_liu_edmonds import decode_mst
 from allennlp.training.metrics import AttachmentScores, CategoricalAccuracy
 
-from train.lemmatize_helper import LemmatizeHelper
+from solution.train.lemmatize_helper import LemmatizeHelper
 
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 

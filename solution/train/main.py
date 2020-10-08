@@ -28,10 +28,10 @@ from allennlp.modules.token_embedders.token_characters_encoder import TokenChara
 from allennlp.training.learning_rate_schedulers.slanted_triangular import SlantedTriangular
 from allennlp.training.trainer import Trainer
 
-from train.dataset_reader import UDDatasetReader
-from train.lemmatize_helper import LemmatizeHelper
-from train.model import DependencyParser, LstmWeightDropSeq2SeqEncoder, TaskConfig
-from train.morpho_vectorizer import MorphoVectorizer
+from solution.train.dataset_reader import UDDatasetReader
+from solution.train.lemmatize_helper import LemmatizeHelper
+from solution.train.model import DependencyParser, LstmWeightDropSeq2SeqEncoder, TaskConfig
+from solution.train.morpho_vectorizer import MorphoVectorizer
 
 logger = logging.getLogger(__name__)
 
