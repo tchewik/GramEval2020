@@ -1,6 +1,6 @@
 # Description
 
-An isanlp library module for the `ru_bert_final_model` model from the [1st place solution](https://github.com/DanAnastasyev/GramEval2020) for [GramEval2020](https://github.com/dialogue-evaluation/GramEval2020) competition.
+An isanlp library wrapper and docker container for the `ru_bert_final_model` model from the [1st place solution](https://github.com/DanAnastasyev/GramEval2020) for [GramEval-2020](https://github.com/dialogue-evaluation/GramEval2020) competition.
 
 ## Usage example
 
@@ -10,12 +10,12 @@ pip install grpcio
 pip install git+https://github.com/IINemo/isanlp.git
 ```  
 
-2. Deploy docker containers for syntax and discourse parsing:  
+2. Deploy docker container with qbic model for lemmatization, morphology and syntax annotation:  
 ```
 docker run --rm -p 3334:3333 tchewik/isanlp_qbic
 ```  
 
-3. Connect from python using `PipelineCommon` with some external tokenizer (in this example, ``UDPipe``):  
+3. Connect from python using `PipelineCommon` with some external tokenizer (in this example, [UDPipe module](https://github.com/IINemo/isanlp_udpipe):  
 ```python  
 
 from isanlp import PipelineCommon
@@ -42,7 +42,6 @@ ppl_qbic = PipelineCommon([
 text = "По нашим данным, кости обнаружили при рытье котлована торгового центра «Европа» еще в 2006 году."
 
 res = ppl_qbic(text)
-#
 ```   
 
 4. The variable `res['syntax_dep_tree']` can be visualized as:  
