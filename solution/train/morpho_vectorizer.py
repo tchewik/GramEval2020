@@ -72,6 +72,6 @@ class MorphoVectorizer(object):
         return np.array([self.vectorize_word(word) for word in meta['words']])
 
     def apply_to_instances(self, instances):
-        for instance in tqdm(instances, 'MorphoVectorizer apply_to_instances'):
+        for instance in instances:
             grammar_matrix = self.vectorize_instance(instance)
             instance.add_field('morpho_embedding', ArrayField(grammar_matrix))
