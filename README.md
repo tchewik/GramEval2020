@@ -10,7 +10,7 @@ pip install grpcio
 pip install git+https://github.com/IINemo/isanlp.git
 ```  
 
-2. Deploy docker container with qbic model for lemmatization, morphology and syntax annotation:  
+2. Deploy docker container with qbic model for lemmatization, morphology and syntax annotation on host machine:  
 ```
 docker run --rm -p 3334:3333 tchewik/isanlp_qbic
 ```  
@@ -24,7 +24,8 @@ from isanlp.ru.processor_mystem import ProcessorMystem
 from isanlp.ru.converter_mystem_to_ud import ConverterMystemToUd 
 
 
-address_grameval2020 = (address, 3334)
+address_udpipe = ('host_address', port)
+address_grameval2020 = ('host_address', 3334)
 
 ppl_qbic = PipelineCommon([
     (ProcessorRemote(address_udpipe[0], address_udpipe[1], '0'),
