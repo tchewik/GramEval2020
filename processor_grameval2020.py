@@ -39,12 +39,12 @@ class ProcessorGramEval2020:
 
     def init(self):
 
-        if self.model is None:
-            config = Config.load(os.path.join(self._model_path, 'config.json'))
+        config = Config.load(os.path.join(self._model_path, 'config.json'))
 
         logger.info('Config: %s', config)
 
-        device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu:0')
+        print("torch.cuda.is_available()", torch.cuda.is_available())
+        device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu:0')
 
         self._token_indexers = {'tokens': SingleIdTokenIndexer()}
         self._skip_labels = False
@@ -58,7 +58,7 @@ class ProcessorGramEval2020:
         self.model.to(device)
 
         self.model.load_state_dict(
-            torch.load(os.path.join(self._model_path, self._checkpoint_name), map_location=device))
+            torch.load(os.path.join(self._model_path, self._checkpoint_name), map_location=lambda storage, loc: storage))
         self.model.eval()
 
         self.reader = _get_reader(config, skip_labels=True, bert_max_length=BERT_MAX_LENGTH, reader_max_length=None)
