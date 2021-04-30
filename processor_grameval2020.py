@@ -24,12 +24,14 @@ class ProcessorGramEval2020:
                  model_path,
                  model_name="ru_bert_final_model",
                  batch_size=8,
+                 max_sentences=100,
                  pretrained_models_dir="pretrained_models/",
                  delay_init=False):
 
         self._model_path = model_path
         self._model_name = model_name
         self._batch_size = batch_size
+        self._max_sentences = max_sentences
         self._pretrained_models_dir = pretrained_models_dir
         self._checkpoint_name = "best.th"
 
@@ -80,12 +82,6 @@ class ProcessorGramEval2020:
             4. syntax_dep_tree - list of lists of objects WordSynt that represent a dependency tree.
         """
 
-        instances = [self.sentence_to_instance([token.text for token in tokens[sentence.begin:sentence.end]]) for
-                     sentence in sentences]
-
-        self.morpho_vectorizer.apply_to_instances(instances)
-        predictions = self.model.forward_on_instances(instances)
-
         result = {
             "lemma": [],
             "postag": [],
@@ -93,19 +89,27 @@ class ProcessorGramEval2020:
             "syntax_dep_tree": [],
         }
 
-        for annotation in predictions:
-            result["lemma"].append(annotation["predicted_lemmas"])
-            result["postag"].append([morphofeats.split('|', 1)[0] for morphofeats in annotation["predicted_gram_vals"]])
+        batches = len(sentences) // self._max_sentences + 1
+        for batch_number in range(batches):
+            instances = [self.sentence_to_instance([token.text for token in tokens[sentence.begin:sentence.end]]) for
+                         sentence in sentences[batch_number * 100: min(len(sentences), (batch_number + 1) * 100)]]
 
-            morph = [morphofeats.split('|', 1)[1] for morphofeats in annotation["predicted_gram_vals"]]
-            result["morph"].append([self._convert_morphology(word) for word in morph])
+            self.morpho_vectorizer.apply_to_instances(instances)
+            predictions = self.model.forward_on_instances(instances)
 
-            syntax_dep_tree = [WordSynt(
-                parent=int(annotation["predicted_heads"][token_index]) - 1,
-                link_name=annotation["predicted_dependencies"][token_index]
-            ) for token_index in range(len(annotation["predicted_heads"]))]
+            for annotation in predictions:
+                result["lemma"].append(annotation["predicted_lemmas"])
+                result["postag"].append([morphofeats.split('|', 1)[0] for morphofeats in annotation["predicted_gram_vals"]])
 
-            result["syntax_dep_tree"].append(syntax_dep_tree)
+                morph = [morphofeats.split('|', 1)[1] for morphofeats in annotation["predicted_gram_vals"]]
+                result["morph"].append([self._convert_morphology(word) for word in morph])
+
+                syntax_dep_tree = [WordSynt(
+                    parent=int(annotation["predicted_heads"][token_index]) - 1,
+                    link_name=annotation["predicted_dependencies"][token_index]
+                ) for token_index in range(len(annotation["predicted_heads"]))]
+
+                result["syntax_dep_tree"].append(syntax_dep_tree)
 
         return result
 

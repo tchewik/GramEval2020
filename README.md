@@ -15,7 +15,7 @@ pip install git+https://github.com/IINemo/isanlp.git
 docker run --rm -p 3334:3333 tchewik/isanlp_qbic
 ```  
 
-3. Connect from python using `PipelineCommon` with some external tokenizer (in this example, from [UDPipe module](https://github.com/IINemo/isanlp_udpipe)).:  
+3. Connect from python using `PipelineCommon` with some external tokenizer (in this example, from [UDPipe module](https://github.com/IINemo/isanlp_udpipe)):  
 ```python  
 
 from isanlp import PipelineCommon
